@@ -1,0 +1,42 @@
+@model App.ViewModels.UserAccount.Edit.UserAccount
+@{
+    Layout ="Layout";
+    var userAccount = Model;
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <form method="post" asp-action="updateProfile" onsubmit="return validateForm()">
+                <div class="row">
+                    <div class="mb-3 col-md-6 col-lg-4">
+                        <label class="form-label" for="user_account_name">Name</label>
+                        <input id="user_account_name" name="Name" class="form-control form-control-sm" asp-for="@userAccount.Name" required maxlength="50" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3 col-md-6 col-lg-4">
+                        <label class="form-label" for="user_account_email">Email</label>
+                        <input id="user_account_email" name="Email" class="form-control form-control-sm" asp-for="@userAccount.Email" type="email" required maxlength="50" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3 col-md-6 col-lg-4">
+                        <label class="form-label" for="user_account_password">Password</label>
+                        <input id="user_account_password" name="Password" class="form-control form-control-sm" type="password" placeholder="New password" maxlength="100" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3 col-md-6 col-lg-4">
+                        <label class="form-label" for="user_account_password2">Confirm password</label>
+                        <input data-match="user_account_password" id="user_account_password2" name="Password2" class="form-control form-control-sm" type="password" placeholder="New password" maxlength="100" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div class="col-12">
+                        <button class="btn btn-sm btn-primary">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    initPage(true)
+</script>

@@ -1,0 +1,48 @@
+@model App.ViewModels.OrderDetail.Create.OrderDetail
+@{
+    Layout ="Layout";
+    var orderDetail = Model;
+    var products = ViewData["products"] as IEnumerable<App.ViewModels.OrderDetail.Create.Product>;
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <form method="post" asp-action="Create" asp-route-ref="@(System.Net.WebUtility.UrlEncode(ViewData["ref"].ToString()))">
+                <div class="row">
+                    <div class="mb-3 col-md-6 col-lg-4">
+                        <label class="form-label" for="order_detail_order_id">Order Id</label>
+                        <input id="order_detail_order_id" name="OrderId" class="form-control form-control-sm" asp-for="@orderDetail.OrderId" type="number" required />
+                        <span asp-validation-for="OrderId" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3 col-md-6 col-lg-4">
+                        <label class="form-label" for="order_detail_no">No</label>
+                        <input id="order_detail_no" name="No" class="form-control form-control-sm" asp-for="@orderDetail.No" type="number" required />
+                        <span asp-validation-for="No" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3 col-md-6 col-lg-4">
+                        <label class="form-label" for="order_detail_product_id">Product</label>
+                        <select id="order_detail_product_id" name="ProductId" class="form-select form-select-sm" required>
+                            @foreach (var product in products) {
+                            <option value="@product.Id" selected=@(orderDetail !=null && orderDetail.ProductId==product.Id)>@product.Name</option>
+                            }
+                        </select>
+                        <span asp-validation-for="ProductId" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3 col-md-6 col-lg-4">
+                        <label class="form-label" for="order_detail_qty">Qty</label>
+                        <input id="order_detail_qty" name="Qty" class="form-control form-control-sm" asp-for="@orderDetail.Qty" type="number" required />
+                        <span asp-validation-for="Qty" class="text-danger"></span>
+                    </div>
+                    <div class="col-12">
+                        <a class="btn btn-sm btn-secondary" href="@ViewData["ref"]">Cancel</a>
+                        <button class="btn btn-sm btn-primary">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    initPage(true)
+</script>

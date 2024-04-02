@@ -1,0 +1,65 @@
+@model App.ViewModels.UserAccount.Edit.UserAccount
+@{
+    Layout ="Layout";
+    var userAccount = Model;
+    var userAccountUserRoles = ViewData["userAccountUserRoles"] as IEnumerable<App.ViewModels.UserAccount.Edit.UserAccountUserRole>;
+    var roles = ViewData["roles"] as IEnumerable<App.ViewModels.UserAccount.Edit.Role>;
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <form method="post" asp-action="Edit" asp-route-ref="@(System.Net.WebUtility.UrlEncode(ViewData["ref"].ToString()))" onsubmit="return validateForm()">
+                <div class="row">
+                    <div class="mb-3 col-md-6 col-lg-4">
+                        <label class="form-label" for="user_account_id">Id</label>
+                        <input readonly id="user_account_id" name="Id" class="form-control form-control-sm" asp-for="@userAccount.Id" type="number" required />
+                        <span asp-validation-for="Id" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3 col-md-6 col-lg-4">
+                        <label class="form-label" for="user_account_name">Name</label>
+                        <input id="user_account_name" name="Name" class="form-control form-control-sm" asp-for="@userAccount.Name" required maxlength="50" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3 col-md-6 col-lg-4">
+                        <label class="form-label" for="user_account_email">Email</label>
+                        <input id="user_account_email" name="Email" class="form-control form-control-sm" asp-for="@userAccount.Email" type="email" required maxlength="50" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3 col-md-6 col-lg-4">
+                        <label class="form-label" for="user_account_password">Password</label>
+                        <input id="user_account_password" name="Password" class="form-control form-control-sm" type="password" placeholder="New password" maxlength="100" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3 col-md-6 col-lg-4">
+                        <label class="form-label" for="user_account_password2">Confirm password</label>
+                        <input data-match="user_account_password" id="user_account_password2" name="Password2" class="form-control form-control-sm" type="password" placeholder="New password" maxlength="100" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div class="form-check col-md-6 col-lg-4">
+                        <input id="user_account_active" name="Active" class="form-check-input" type="checkbox" value="true" checked=@(@userAccount.Active) />
+                        <label class="form-check-label" for="user_account_active">Active</label>
+                        <span asp-validation-for="Active" class="text-danger"></span>
+                    </div>
+                    <div class="col-12">
+                        <h6>
+                        </h6><label class="form-label">Roles</label>
+                        @foreach (var role in roles) {
+                        <div class="form-check">
+                            <input id="user_role_role_id@(role.Id)" name="RoleId" class="form-check-input" type="checkbox" value="@role.Id" checked=@(userAccountUserRoles.Any(e=> e.RoleId == role.Id))/>
+                            <label class="form-check-label" for="user_role_role_id@(role.Id)">@role.Name</label>
+                        </div>
+                        }
+                    </div>
+                    <div class="col-12">
+                        <a class="btn btn-sm btn-secondary" href="@ViewData["ref"]">Cancel</a>
+                        <button class="btn btn-sm btn-primary">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    initPage(true)
+</script>

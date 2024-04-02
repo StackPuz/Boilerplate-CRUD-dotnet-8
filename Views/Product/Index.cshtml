@@ -1,0 +1,117 @@
+@model IEnumerable<App.ViewModels.Product.Index.Product>
+@{
+    Layout ="Layout";
+    var products = Model;
+    var paging = ViewData["paging"] as Dictionary<string, int>;
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <div class="col-12"><input id="searchbar_toggle" type="checkbox" />
+                <div id="searchbar" class="mb-4">
+                    <div class="form-group col-lg-2 me-2 mb-lg-0 mb-3">
+                        <select id="search_col" onchange="searchChange()" class="form-select form-select-sm">
+                            <option value="Id" data-type="number" selected=@(Context.Request.Query["sc"]=="Id" )>Product Id</option>
+                            <option value="Image" selected=@(Context.Request.Query["sc"]=="Image" )>Product Image</option>
+                            <option value="Name" selected=@(Context.Request.Query["sc"]=="Name" )>Product Name</option>
+                            <option value="Price" data-type="number" selected=@(Context.Request.Query["sc"]=="Price" )>Product Price</option>
+                            <option value="BrandName" selected=@(Context.Request.Query["sc"]=="BrandName" )>Brand Name</option>
+                            <option value="UserAccountName" selected=@(Context.Request.Query["sc"]=="UserAccountName" )>User Account Name</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-lg-2 me-2 mb-lg-0 mb-3">
+                        <select id="search_oper" class="form-select form-select-sm">
+                            <option value="c" selected=@(Context.Request.Query["so"]=="c" )>Contains</option>
+                            <option value="e" selected=@(Context.Request.Query["so"]=="e" )>Equals</option>
+                            <option value="g" selected=@(Context.Request.Query["so"]=="g" )>&gt;</option>
+                            <option value="ge" selected=@(Context.Request.Query["so"]=="ge" )>&gt;&#x3D;</option>
+                            <option value="l" selected=@(Context.Request.Query["so"]=="l" )>&lt;</option>
+                            <option value="le" selected=@(Context.Request.Query["so"]=="le" )>&lt;&#x3D;</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-lg-2 me-2 mb-lg-0 mb-3">
+                        <input id="search_word" autocomplete="off" onkeyup="search(event)" value="@Context.Request.Query["sw"]" class="form-control form-control-sm" />
+                    </div>
+                    <div class="col">
+                        <button class="btn btn-primary btn-sm" onclick="search()">Search</button>
+                        <button class="btn btn-secondary btn-sm" onclick="clearSearch()">Clear</button>
+                    </div>
+                </div>
+                <table class="table table-sm table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th class="@Html.GetSortClass("Id","asc")"><a href="@Html.GetLink("sort","Id","asc")">Id</a></th>
+                            <th class="@Html.GetSortClass("Image") d-none d-md-table-cell"><a href="@Html.GetLink("sort","Image")">Image</a></th>
+                            <th class="@Html.GetSortClass("Name")"><a href="@Html.GetLink("sort","Name")">Name</a></th>
+                            <th class="@Html.GetSortClass("Price") d-none d-md-table-cell"><a href="@Html.GetLink("sort","Price")">Price</a></th>
+                            <th class="@Html.GetSortClass("BrandName") d-none d-md-table-cell"><a href="@Html.GetLink("sort","BrandName")">Brand</a></th>
+                            <th class="@Html.GetSortClass("UserAccountName") d-none d-md-table-cell"><a href="@Html.GetLink("sort","UserAccountName")">Create User</a></th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var product in products) {
+                        <tr>
+                            <td class="text-center">@product.Id</td>
+                            <td class="d-none d-md-table-cell text-center">@if (@product.Image != null) { <a href="/uploads/products/@product.Image" target="_blank" title="@product.Image"><img class="img-list" src="/uploads/products/@product.Image" /></a> }</td>
+                            <td>@product.Name</td>
+                            <td class="d-none d-md-table-cell text-end">@product.Price</td>
+                            <td class="d-none d-md-table-cell">@product.BrandName</td>
+                            <td class="d-none d-md-table-cell">@product.UserAccountName</td>
+                            <td class="text-center">
+                                <a class="btn btn-sm btn-secondary" href="/Product/Detail/@product.Id" title="View"><i class="fa fa-eye"></i></a>
+                                <a class="btn btn-sm btn-primary" href="/Product/Edit/@product.Id" title="Edit"><i class="fa fa-pencil"></i></a>
+                                <a class="btn btn-sm btn-danger" href="/Product/Delete/@product.Id" title="Delete"><i class="fa fa-times"></i></a>
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+                <div class="row mb-1">
+                    <div class="col-md-3 col-6">
+                        <label>Show
+                            <select id="page_size" onchange="location = this.value">
+                                <option value="@Html.GetLink("size",10)" selected=@(Context.Request.Query["size"]=="10" )>10</option>
+                                <option value="@Html.GetLink("size",20)" selected=@(Context.Request.Query["size"]=="20" )>20</option>
+                                <option value="@Html.GetLink("size",30)" selected=@(Context.Request.Query["size"]=="30" )>30</option>
+                            </select>
+                            entries
+                        </label>
+                    </div>
+                    <div class="col-md-9 col-6">
+                        <div class="float-right d-none d-md-block">
+                            <ul class="pagination flex-wrap">
+                                <li class="page-item@(paging["current"] <=1 ?" disabled" :"" )"><a class="page-link" href="@Html.GetLink("page",paging["current"]-1)">Prev</a></li>
+                                @for(var index = 1; index <= paging["last"]; index++) {
+                                <li class="page-item@(paging["current"]==index ?" active" :"" )"><a class="page-link" href="@Html.GetLink("page",index)">@index</a></li>
+                                }
+                                <li class="page-item@(paging["current"]>= paging["last"] ?" disabled" :"")"><a class="page-link" href="@Html.GetLink("page",paging["current"]+1)">Next</a></li>
+                            </ul>
+                        </div>
+                        <div class="float-right d-block d-md-none">
+                            <label> Page
+                                <select id="page_index" onchange="location = this.value">
+                                    @for(var index = 1; index <= paging["last"]; index++) {
+                                    <option value="@Html.GetLink("page",index)" selected=@(paging["current"]==index)>@index</option>
+                                    }
+                                </select>
+                            </label> of <span>@paging["last"]</span>
+                            <div class="btn-group">
+                                <a class="btn btn-primary btn-sm@(paging["current"] <=1 ?" disabled" :"" )" href="@Html.GetLink("page",paging["current"]-1)"><i class="fa fa-chevron-left"></i></a>
+                                <a class="btn btn-primary btn-sm@(paging["current"]>= paging["last"] ?" disabled" :"")" href="@Html.GetLink("page",paging["current"]+1)"><i class="fa fa-chevron-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <a class="btn btn-sm btn-primary" href="/Product/Create">Create</a>
+            </div>
+            <style>
+                #searchbar_toggle_menu { display: inline-flex!important }
+            </style>
+        </div>
+    </div>
+</div>
+<script>
+    initPage()
+</script>

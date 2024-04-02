@@ -1,0 +1,39 @@
+@model App.ViewModels.OrderDetail.Delete.OrderDetail
+@{
+    Layout ="Layout";
+    var orderDetail = Model;
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <form method="post" asp-action="Delete" asp-route-ref="@(System.Net.WebUtility.UrlEncode(ViewData["ref"].ToString()))">
+                <div class="row">
+                    <div class="mb-3 col-md-6 col-lg-4">
+                        <label class="form-label" for="order_detail_order_id">Order Id</label>
+                        <input readonly id="order_detail_order_id" name="OrderId" class="form-control form-control-sm" value="@orderDetail.OrderId" type="number" required />
+                    </div>
+                    <div class="mb-3 col-md-6 col-lg-4">
+                        <label class="form-label" for="order_detail_no">No</label>
+                        <input readonly id="order_detail_no" name="No" class="form-control form-control-sm" value="@orderDetail.No" type="number" required />
+                    </div>
+                    <div class="mb-3 col-md-6 col-lg-4">
+                        <label class="form-label" for="product_name">Product</label>
+                        <input readonly id="product_name" name="product_name" class="form-control form-control-sm" value="@orderDetail.ProductName" maxlength="50" />
+                    </div>
+                    <div class="mb-3 col-md-6 col-lg-4">
+                        <label class="form-label" for="order_detail_qty">Qty</label>
+                        <input readonly id="order_detail_qty" name="Qty" class="form-control form-control-sm" value="@orderDetail.Qty" type="number" required />
+                    </div>
+                    <div class="col-12">
+                        <a class="btn btn-sm btn-secondary" href="@ViewData["ref"]">Cancel</a>
+                        <button class="btn btn-sm btn-danger">Delete</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    initPage(true)
+</script>

@@ -1,0 +1,46 @@
+@model App.ViewModels.Product.Delete.Product
+@{
+    Layout ="Layout";
+    var product = Model;
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <form method="post" asp-action="Delete" asp-route-ref="@(System.Net.WebUtility.UrlEncode(ViewData["ref"].ToString()))">
+                <div class="row">
+                    <div class="mb-3 col-md-6 col-lg-4">
+                        <label class="form-label" for="product_id">Id</label>
+                        <input readonly id="product_id" name="Id" class="form-control form-control-sm" value="@product.Id" type="number" required />
+                    </div>
+                    <div class="mb-3 col-md-6 col-lg-4">
+                        <label class="form-label" for="product_name">Name</label>
+                        <input readonly id="product_name" name="Name" class="form-control form-control-sm" value="@product.Name" required maxlength="50" />
+                    </div>
+                    <div class="mb-3 col-md-6 col-lg-4">
+                        <label class="form-label" for="product_price">Price</label>
+                        <input readonly id="product_price" name="Price" class="form-control form-control-sm" value="@product.Price" type="number" step="0.1" required />
+                    </div>
+                    <div class="mb-3 col-md-6 col-lg-4">
+                        <label class="form-label" for="brand_name">Brand</label>
+                        <input readonly id="brand_name" name="brand_name" class="form-control form-control-sm" value="@product.BrandName" maxlength="50" />
+                    </div>
+                    <div class="mb-3 col-md-6 col-lg-4">
+                        <label class="form-label" for="user_account_name">Create User</label>
+                        <input readonly id="user_account_name" name="user_account_name" class="form-control form-control-sm" value="@product.UserAccountName" maxlength="50" />
+                    </div>
+                    <div class="mb-3 col-md-6 col-lg-4"><label class="form-label">Image</label>
+                        <div><a href="/uploads/products/@product.Image" target="_blank" title="@product.Image"><img class="img-item" src="/uploads/products/@product.Image" /></a></div>
+                    </div>
+                    <div class="col-12">
+                        <a class="btn btn-sm btn-secondary" href="@ViewData["ref"]">Cancel</a>
+                        <button class="btn btn-sm btn-danger">Delete</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    initPage(true)
+</script>

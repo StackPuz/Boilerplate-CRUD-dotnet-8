@@ -1,0 +1,38 @@
+@model App.ViewModels.OrderHeader.Create.OrderHeader
+@{
+    Layout ="Layout";
+    var orderHeader = Model;
+    var customers = ViewData["customers"] as IEnumerable<App.ViewModels.OrderHeader.Create.Customer>;
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <form method="post" asp-action="Create" asp-route-ref="@(System.Net.WebUtility.UrlEncode(ViewData["ref"].ToString()))">
+                <div class="row">
+                    <div class="mb-3 col-md-6 col-lg-4">
+                        <label class="form-label" for="order_header_customer_id">Customer</label>
+                        <select id="order_header_customer_id" name="CustomerId" class="form-select form-select-sm" required>
+                            @foreach (var customer in customers) {
+                            <option value="@customer.Id" selected=@(orderHeader !=null && orderHeader.CustomerId==customer.Id)>@customer.Name</option>
+                            }
+                        </select>
+                        <span asp-validation-for="CustomerId" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3 col-md-6 col-lg-4">
+                        <label class="form-label" for="order_header_order_date">Order Date</label>
+                        <input id="order_header_order_date" name="OrderDate" class="form-control form-control-sm" asp-for="@orderHeader.OrderDate" data-type="date" autocomplete="off" required />
+                        <span asp-validation-for="OrderDate" class="text-danger"></span>
+                    </div>
+                    <div class="col-12">
+                        <a class="btn btn-sm btn-secondary" href="@ViewData["ref"]">Cancel</a>
+                        <button class="btn btn-sm btn-primary">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    initPage(true)
+</script>

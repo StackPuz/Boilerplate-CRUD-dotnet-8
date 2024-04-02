@@ -1,0 +1,71 @@
+@model App.ViewModels.OrderHeader.Edit.OrderHeader
+@{
+    Layout ="Layout";
+    var orderHeader = Model;
+    var orderHeaderOrderDetails = ViewData["orderHeaderOrderDetails"] as IEnumerable<App.ViewModels.OrderHeader.Edit.OrderHeaderOrderDetail>;
+    var customers = ViewData["customers"] as IEnumerable<App.ViewModels.OrderHeader.Edit.Customer>;
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <form method="post" asp-action="Edit" asp-route-ref="@(System.Net.WebUtility.UrlEncode(ViewData["ref"].ToString()))">
+                <div class="row">
+                    <div class="mb-3 col-md-6 col-lg-4">
+                        <label class="form-label" for="order_header_id">Id</label>
+                        <input readonly id="order_header_id" name="Id" class="form-control form-control-sm" asp-for="@orderHeader.Id" type="number" required />
+                        <span asp-validation-for="Id" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3 col-md-6 col-lg-4">
+                        <label class="form-label" for="order_header_customer_id">Customer</label>
+                        <select id="order_header_customer_id" name="CustomerId" class="form-select form-select-sm" required>
+                            @foreach (var customer in customers) {
+                            <option value="@customer.Id" selected=@(orderHeader !=null && orderHeader.CustomerId==customer.Id)>@customer.Name</option>
+                            }
+                        </select>
+                        <span asp-validation-for="CustomerId" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3 col-md-6 col-lg-4">
+                        <label class="form-label" for="order_header_order_date">Order Date</label>
+                        <input id="order_header_order_date" name="OrderDate" class="form-control form-control-sm" value="@Html.FormatDate(orderHeader.OrderDate)" data-type="date" autocomplete="off" required />
+                        <span asp-validation-for="OrderDate" class="text-danger"></span>
+                    </div>
+                    <div class="col-12">
+                        <table class="table table-sm table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Product</th>
+                                    <th>Qty</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var orderHeaderOrderDetail in orderHeaderOrderDetails) {
+                                <tr>
+                                    <td class="text-center">@orderHeaderOrderDetail.No</td>
+                                    <td>@orderHeaderOrderDetail.ProductName</td>
+                                    <td class="text-end">@orderHeaderOrderDetail.Qty</td>
+                                    <td class="text-center">
+                                        <a class="btn btn-sm btn-primary" href="/OrderDetail/Edit/@orderHeaderOrderDetail.OrderId/@orderHeaderOrderDetail.No" title="Edit"><i class="fa fa-pencil"></i></a>
+                                        <a class="btn btn-sm btn-danger" href="/OrderDetail/Delete/@orderHeaderOrderDetail.OrderId/@orderHeaderOrderDetail.No" title="Delete"><i class="fa fa-times"></i></a>
+                                    </td>
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                        <a class="btn btn-sm btn-primary" href="/OrderDetail/Create?order_detail_order_id=@orderHeader.Id">Add</a>
+                        <hr />
+                    </div>
+                    <div class="col-12">
+                        <a class="btn btn-sm btn-secondary" href="@ViewData["ref"]">Cancel</a>
+                        <button class="btn btn-sm btn-primary">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    initPage(true)
+</script>

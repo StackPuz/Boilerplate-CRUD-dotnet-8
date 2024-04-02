@@ -1,0 +1,43 @@
+@{
+    Layout ="Layout";
+    var userAccount = Model;
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <div class="center-container">
+                <div class="d-flex justify-content-center">
+                    <div class="card card-width p-0">
+                        <div class="card-header">
+                            <h3>Login</h3>
+                        </div>
+                        <div class="card-body">
+                            <i class="login fa fa-user-circle"></i>
+                            <form method="post" asp-action="Login">
+                                <div class="row">
+                                    <div class="mb-3 col-12">
+                                        <label class="form-label" for="user_account_name">User Name</label>
+                                        <input id="user_account_name" name="Name" class="form-control form-control-sm" required maxlength="50" />
+                                    </div>
+                                    <div class="mb-3 col-12">
+                                        <label class="form-label" for="user_account_password">Password</label>
+                                        <input id="user_account_password" name="Password" class="form-control form-control-sm" type="password" required maxlength="100" />
+                                    </div>
+                                    <div class="col-12">
+                                        <button class="btn btn-sm btn-secondary w-100">Login</button>
+                                        <a href="/resetPassword">Forgot Password?</a>
+                                    </div>
+                                </div>
+                            </form>
+                            @if (ViewData["error"] != null) { <span class="text-danger">@ViewData["error"]</span> }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    initPage(true)
+</script>

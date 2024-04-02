@@ -1,0 +1,48 @@
+@model App.ViewModels.Product.Create.Product
+@{
+    Layout ="Layout";
+    var product = Model;
+    var brands = ViewData["brands"] as IEnumerable<App.ViewModels.Product.Create.Brand>;
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <form method="post" asp-action="Create" asp-route-ref="@(System.Net.WebUtility.UrlEncode(ViewData["ref"].ToString()))" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="mb-3 col-md-6 col-lg-4">
+                        <label class="form-label" for="product_name">Name</label>
+                        <input id="product_name" name="Name" class="form-control form-control-sm" asp-for="@product.Name" required maxlength="50" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3 col-md-6 col-lg-4">
+                        <label class="form-label" for="product_price">Price</label>
+                        <input id="product_price" name="Price" class="form-control form-control-sm" asp-for="@product.Price" type="number" step="0.1" required />
+                        <span asp-validation-for="Price" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3 col-md-6 col-lg-4">
+                        <label class="form-label" for="product_brand_id">Brand</label>
+                        <select id="product_brand_id" name="BrandId" class="form-select form-select-sm" required>
+                            @foreach (var brand in brands) {
+                            <option value="@brand.Id" selected=@(product !=null && product.BrandId==brand.Id)>@brand.Name</option>
+                            }
+                        </select>
+                        <span asp-validation-for="BrandId" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3 col-md-6 col-lg-4">
+                        <label class="form-label" for="product_image">Image</label>
+                        <input type="file" accept="image/*" id="product_image" name="ImageFile" class="form-control form-control-sm" maxlength="50" />
+                        <span asp-validation-for="Image" class="text-danger"></span>
+                    </div>
+                    <div class="col-12">
+                        <a class="btn btn-sm btn-secondary" href="@ViewData["ref"]">Cancel</a>
+                        <button class="btn btn-sm btn-primary">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    initPage(true)
+</script>
