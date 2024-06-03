@@ -1,5 +1,5 @@
-# Backend-CRUD-dotnet-8
-Boilerplate Backend CRUD Web App created with .NET 8 by [StackPuz](https://stackpuz.com).
+# Boilerplate-CRUD-dotnet-8
+Boilerplate CRUD Web App created with .NET 8 by [StackPuz](https://stackpuz.com).
 
 ## Demo
 Checkout the live demo at https://demo.stackpuz.com
@@ -20,7 +20,7 @@ Checkout the live demo at https://demo.stackpuz.com
 - MySQL 5.7
 
 ## Installation
-1. Clone this repository. `git clone https://github.com/stackpuz/Backend-CRUD-dotnet-8.git .`
+1. Clone this repository. `git clone https://github.com/stackpuz/Boilerplate-CRUD-dotnet-8.git .`
 2. Create a new database and run [/database.sql](/database.sql) script to create tables and import data.
 3. Edit the database configuration in [/appsettings.json](/appsettings.json) file.
     ```
